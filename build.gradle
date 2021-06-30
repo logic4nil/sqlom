@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
+group 'com.logic4nil'
+version '0.1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    
+    implementation group: 'org.apache.calcite', name: 'calcite-core', version: '1.27.0'
+    implementation group: 'org.apache.calcite', name: 'calcite-file', version: '1.27.0'
+    implementation group: 'org.apache.calcite', name: 'calcite-linq4j', version: '1.27.0'
+
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
