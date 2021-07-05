@@ -1,6 +1,5 @@
 package com.logic4nil.calcite;
 
-import com.google.common.collect.ImmutableMap;
 import org.apache.calcite.linq4j.Enumerable;
 import org.apache.calcite.linq4j.Linq4j;
 import org.apache.calcite.linq4j.tree.Primitive;
