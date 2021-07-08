@@ -3,36 +3,35 @@ package com.logic4nil.calcite;
 import org.apache.calcite.schema.Schema;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Type;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-class People {
-    // field
-    public String id;
-    public String name;
-    public People(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-}
-// table
-class Detail {
-    // field
-    public String id;
-    public int age;
+public class MemoryFactoryTest {
 
-    public Detail(String id, int age) {
-        this.id = id;
-        this.age = age;
+    public static class People {
+        // field
+        public String id;
+        public String name;
+        public People(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
     }
-}
-class MemoryFactoryTest {
+    // table
+    public static class Detail {
+        // field
+        public String id;
+        public int age;
 
+        public Detail(String id, int age) {
+            this.id = id;
+            this.age = age;
+        }
+    }
 
     private static void printResultSet(ResultSet resultSet) throws SQLException {
         ResultSetMetaData metaData = resultSet.getMetaData();
@@ -73,7 +72,33 @@ class MemoryFactoryTest {
         // 创建 Statement
         Statement statement = con.createStatement();
 
-        ResultSet resultSet = statement.executeQuery("select max(age) from sc.detail");
+        ResultSet resultSet = statement.executeQuery("select * from sc.detail");
+        printResultSet(resultSet);
+        resultSet.close();
+        statement.close();
+        con.close();
+    }
+
+    @Test void testMap() throws SQLException {
+        Connection con = MemoryFactory.getConnection(true);
+
+        Schema schema = MemorySchemaFactory.create(con, "sc");
+        ArrayList list = new ArrayList();
+
+        HashMap<String, Object> one = new HashMap<String, Object>();
+        one.put("field1", 123);
+        one.put("field2", "test");
+        list.add(one);
+        HashMap<String, Object> one2 = new HashMap<String, Object>();
+        one2.put("field1", 12);
+        one2.put("field2", "test1");
+        list.add(one2);
+
+        ((MemorySchema) schema).addMapDatas("test", list);
+
+        Statement statement = con.createStatement();
+
+        ResultSet resultSet = statement.executeQuery("select max(field1) from sc.test");
         printResultSet(resultSet);
         resultSet.close();
         statement.close();

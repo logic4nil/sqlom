@@ -6,10 +6,7 @@ import org.apache.calcite.linq4j.tree.Primitive;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class MemorySchema extends AbstractSchema {
 
@@ -20,16 +17,16 @@ public class MemorySchema extends AbstractSchema {
         return tableMaps;
     }
 
-    public void addTable(String tableName, Table table){
+    public void addTable(String tableName, MemoryTable table){
         tableMaps.put(tableName, table);
     }
 
-    public void addTable(Class<?> clazz, Table table) {
-        this.addTable(clazz.getSimpleName().toLowerCase(Locale.ROOT), table);
+    public void addCollectionDatas(Class<?> clazz, List data){
+        this.addTable(clazz.getSimpleName().toLowerCase(Locale.getDefault()), new MemoryTable(clazz, data));
     }
 
-    public void addCollectionDatas(Class<?> clazz, Collection data){
-        this.addTable(clazz, new MemoryTable(clazz, toEnumerable(data)));
+    public void addMapDatas(String tableName, List<Map> data){
+        this.addTable(tableName.toLowerCase(Locale.getDefault()), new MemoryTable(Map.class, data));
     }
 
     private static Enumerable toEnumerable(final Object o) {
